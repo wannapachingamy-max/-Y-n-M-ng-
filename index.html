@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="th" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yún Mèng - Commission & Admin Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Prompt', 'sans-serif'],
+                    },
+                    colors: {
+                        'ch-coral': '#F39494',      /* 海天霞 R243 G166 B148 */
+                        'ch-peach': '#EE7759',      /* 缙云 R238 G121 B89 */
+                        'ch-rust': '#BA5140',       /* 繎黄 R186 G81 B64 */
+                        'ch-crimson': '#C12C1F',    /* 珊瑚赫 R193 G44 B31 */
+                        'ch-bg': '#FFF7F6',         /* Soft warm background */
+                        'ch-gold': '#E6C567',       /* Muted Chinese Gold */
+                        'ink-black': '#2A1E1E'
+                    },
+                    boxShadow: {
+                        'glow': '0 0 30px rgba(193, 44, 31, 0.3)',
+                        'card': '0 20px 40px -10px rgba(186, 81, 64, 0.1), 0 10px 20px -8px rgba(0, 0, 0, 0.04)',
+                        'soft': '0 12px 30px rgba(0,0,0,0.06)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #FFF7F6;
+            color: #2A1E1E;
+            overflow-x: hidden;
+        }
+
+        .animated-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -10;
+            background-image: 
+                radial-gradient(circle at 15% 25%, rgba(243, 148, 148, 0.15) 0%, transparent 45%),
+                radial-gradient(circle at 85% 75%, rgba(186, 81, 64, 0.1) 0%, transparent 45%),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 160 160'%3E%3Cpath d='M80 14 C94 44, 118 60, 146 80 C118 100, 94 116, 80 146 C66 116, 42 100, 14 80 C42 60, 66 44, 80 14 Z' fill='%23C12C1F' fill-opacity='0.035'/%3E%3C/svg%3E");
+            background-size: auto, auto, 180px 180px;
+        }
+
+        @keyframes floatClouds {
+            0% { transform: translateX(-10%) translateY(0px); opacity: 0.25; }
+            50% { transform: translateX(12%) translateY(-18px); opacity: 0.5; }
+            100% { transform: translateX(-10%) translateY(0px); opacity: 0.25; }
+        }
+        .cloud-parallax-1 {
+            position: fixed; top: 12%; left: -10%; width: 550px; height: 200px;
+            background: radial-gradient(ellipse at center, rgba(255,255,255,0.85) 0%, transparent 70%);
+            border-radius: 50%; pointer-events: none; z-index: -5;
+            animation: floatClouds 20s ease-in-out infinite;
+        }
+        .cloud-parallax-2 {
+            position: fixed; bottom: 10%; right: -10%; width: 650px; height: 240px;
+            background: radial-gradient(ellipse at center, rgba(255,255,255,0.75) 0%, transparent 70%);
+            border-radius: 50%; pointer-events: none; z-index: -5;
+            animation: floatClouds 26s ease-in-out infinite reverse;
+        }
+
+        .border-chinese {
+            border: 2px solid rgba(186, 81, 64, 0.2);
+            position: relative;
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(16px);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .border-chinese:hover {
+            border-color: rgba(193, 44, 31, 0.5);
+            box-shadow: 0 25px 50px rgba(186, 81, 64, 0.12);
+            transform: translateY(-4px);
+        }
+
+        .border-chinese::before, .border-chinese::after {
+            content: '';
+            position: absolute;
+            width: 16px; height: 16px;
+            border: 2px solid #E6C567;
+            transition: transform 0.4s ease;
+        }
+        .border-chinese::before { top: -6px; left: -6px; border-right: none; border-bottom: none; }
+        .border-chinese::after { bottom: -6px; right: -6px; border-left: none; border-top: none; }
+
+        @keyframes floatSlow {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(1.5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+        .floating { animation: floatSlow 6s ease-in-out infinite; }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 25px rgba(230, 197, 103, 0.4); }
+            50% { box-shadow: 0 0 45px rgba(193, 44, 31, 0.25); }
+        }
+        .glow-pulse { animation: pulseGlow 3.5s infinite; }
+
+        .highlight-text {
+            background: linear-gradient(120deg, transparent 0%, rgba(243, 148, 148, 0.25) 15%, rgba(243, 148, 148, 0.25) 85%, transparent 100%);
+            padding: 0 10px; border-radius: 8px;
+        }
+
+        /* Capsule Navbar */
+        .capsule-nav-item {
+            border-radius: 9999px;
+            padding: 0.5rem 1.25rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            white-space: nowrap;
+        }
+        .capsule-nav-item:hover, .capsule-nav-item.active {
+            background-color: #C12C1F;
+            color: #ffffff;
+            box-shadow: 0 8px 20px rgba(193, 44, 31, 0.35);
+            transform: translateY(-2px);
+        }
+
+        /* Glowing status dots for queue */
+        @keyframes statusPulseRed {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(193, 44, 31, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(193, 44, 31, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(193, 44, 31, 0); }
+        }
+        .status-dot-red { animation: statusPulseRed 2s infinite; }
+
+        @keyframes statusPulseBlue {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+        .status-dot-blue { animation: statusPulseBlue 2s infinite; }
+
+        @keyframes statusPulseGreen {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+        .status-dot-green { animation: statusPulseGreen 2s infinite; }
+
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #FFF7F6; }
+        ::-webkit-scrollbar-thumb { background: #E6C567; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #C12C1F; }
+    </style>
+</head>
+<body class="antialiased flex flex-col min-h-screen">
+
+    <div class="animated-bg"></div>
+    <div class="cloud-parallax-1"></div>
+    <div class="cloud-parallax-2"></div>
+
+    <div id="page-loader" class="fixed inset-0 z-50 bg-[#FFF7F6]/95 backdrop-blur-md flex flex-col items-center justify-center transition-opacity duration-500">
+        <div class="relative w-28 h-28 mb-6">
+            <div class="absolute inset-0 rounded-full border-4 border-ch-coral/30 animate-ping"></div>
+            <div class="absolute inset-0 rounded-full border-4 border-ch-gold border-t-ch-crimson animate-spin"></div>
+            <div class="absolute inset-2 bg-white rounded-full flex items-center justify-center shadow-inner">
+                <i class="fa-solid fa-paw text-ch-crimson text-3xl animate-bounce"></i>
+            </div>
+        </div>
+        <h2 class="text-xl font-bold text-ink-black tracking-wide mb-2">Yún Mèng <span class="text-ch-crimson font-light">กำลังรวบรวมเมฆา...</span></h2>
+        <p class="text-xs text-gray-500">เตรียมรับความน่ารักและผลงานสุดละมุน</p>
+    </div>
+
+    <nav class="fixed w-full z-40 bg-white/90 backdrop-blur-2xl shadow-sm border-b border-ch-gold/30 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center cursor-pointer group" onclick="window.scrollTo(0,0)">
+                    <span class="text-2xl font-bold text-ch-crimson tracking-wider flex items-center gap-2.5 group-hover:scale-105 transition-transform">
+                        <i class="fa-solid fa-paw text-ch-gold animate-bounce"></i>
+                        Yún Mèng
+                    </span>
+                </div>
+
+                <!-- Desktop Capsule Menu -->
+                <div class="hidden lg:flex items-center space-x-1.5 bg-gray-100/90 p-1.5 rounded-full border border-gray-200/80 shadow-inner">
+                    <a href="#about" class="capsule-nav-item text-ink-black font-medium text-sm active" onclick="setActiveCapsule(this)">หน้าแรก</a>
+                    <a href="#portfolio" class="capsule-nav-item text-ink-black font-medium text-sm" onclick="setActiveCapsule(this)">ผลงาน</a>
+                    <a href="#pricing" class="capsule-nav-item text-ink-black font-medium text-sm" onclick="setActiveCapsule(this)">ราคา</a>
+                    <a href="#payment" class="capsule-nav-item text-ink-black font-medium text-sm" onclick="setActiveCapsule(this)">ชำระเงิน</a>
+                    <a href="#queue" class="capsule-nav-item text-ink-black font-medium text-sm" onclick="setActiveCapsule(this)">เช็คคิว</a>
+                </div>
+
+                <div class="hidden lg:flex items-center">
+                    <button onclick="openAdminModal()" class="px-5 py-2.5 bg-ink-black text-white rounded-full text-xs font-semibold hover:bg-ch-crimson transition-all shadow-md flex items-center gap-2 hover:scale-105">
+                        <i class="fa-solid fa-lock text-[10px]"></i> แอดมิน
+                    </button>
+                </div>
+
+                <!-- Mobile & Tablet Menu Button -->
+                <div class="lg:hidden flex items-center gap-2.5">
+                    <button onclick="openAdminModal()" class="px-3.5 py-1.5 bg-ink-black text-white rounded-full text-xs flex items-center gap-1.5 shadow">
+                        <i class="fa-solid fa-lock text-[10px]"></i> แอดมิน
+                    </button>
+                    <button id="mobile-menu-btn" class="text-ch-crimson hover:text-ch-gold focus:outline-none p-2 text-2xl">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile / Tablet Menu Panel -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-white/95 backdrop-blur-2xl border-b border-ch-gold/30 shadow-2xl absolute w-full transition-all duration-300">
+            <div class="px-6 py-6 space-y-3 text-center flex flex-col">
+                <a href="#about" class="block px-5 py-3.5 text-ink-black hover:text-white hover:bg-ch-crimson rounded-2xl transition-all font-medium mobile-link">หน้าแรก</a>
+                <a href="#portfolio" class="block px-5 py-3.5 text-ink-black hover:text-white hover:bg-ch-crimson rounded-2xl transition-all font-medium mobile-link">ผลงาน</a>
+                <a href="#pricing" class="block px-5 py-3.5 text-ink-black hover:text-white hover:bg-ch-crimson rounded-2xl transition-all font-medium mobile-link">ราคา</a>
+                <a href="#payment" class="block px-5 py-3.5 text-ink-black hover:text-white hover:bg-ch-crimson rounded-2xl transition-all font-medium mobile-link">ชำระเงิน</a>
+                <a href="#queue" class="block px-5 py-3.5 text-ink-black hover:text-white hover:bg-ch-crimson rounded-2xl transition-all font-medium mobile-link">เช็คคิว</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow pt-20">
+        <section id="about" class="relative py-20 md:py-32 px-4 overflow-hidden flex flex-col items-center justify-center min-h-[85vh]">
+            <div class="absolute top-16 left-6 md:left-12 opacity-15 floating text-ch-crimson text-6xl md:text-8xl"><i class="fa-solid fa-paw"></i></div>
+            <div class="absolute bottom-16 right-6 md:right-12 opacity-15 floating text-ch-gold text-7xl md:text-9xl" style="animation-delay: 2.5s;"><i class="fa-solid fa-feather"></i></div>
+            
+            <div class="max-w-4xl mx-auto w-full text-center z-10">
+                <div class="w-40 h-40 md:w-48 md:h-48 mx-auto bg-white rounded-full border-4 border-ch-gold glow-pulse flex items-center justify-center mb-8 relative floating overflow-hidden shadow-2xl">
+                    <img id="display-hero-img" src="https://placehold.co/180x180/ffffff/C12C1F?text=White+Fox" alt="White Fox Logo" class="rounded-full w-full h-full object-cover p-1.5 transition-transform hover:scale-110" onerror="this.src='https://placehold.co/180x180/ffffff/C12C1F?text=Logo'">
+                    <div class="absolute -bottom-2 -right-2 bg-ch-crimson text-white w-12 h-12 rounded-full flex items-center justify-center border-2 border-white shadow-lg">
+                        <i class="fa-solid fa-paint-brush text-sm"></i>
+                    </div>
+                </div>
+
+                <h1 class="text-3xl sm:text-5xl md:text-6xl font-extrabold text-ink-black mb-4 tracking-tight">
+                    🦊 <span id="display-title" class="text-ch-crimson bg-gradient-to-r from-ch-crimson to-ch-rust bg-clip-text text-transparent">Yún Mèng</span> 🌸
+                </h1>
+                <p id="display-subtitle" class="text-lg sm:text-xl md:text-2xl text-gray-700 mb-8 font-medium italic px-4">
+                    "เมฆาแห่งความฝัน"
+                </p>
+                <div class="border-chinese p-6 sm:p-10 max-w-2xl mx-auto mb-10 rounded-3xl shadow-card mx-4 sm:mx-auto">
+                    <p id="display-desc" class="text-base sm:text-lg md:text-xl text-ink-black leading-relaxed font-normal">
+                        <span class="highlight-text font-semibold">ยินดีต้อนรับค่า กดเข้ามาแล้วก็ห้ามออก!</span> <br>
+                        จ้างเค้า = มีกะตังค์ หยอกเล่งง 😝✨<br>
+                        <span class="text-sm text-gray-500 mt-3 block">รับวาดรูปสไตล์อนิเมะ จิบิ และภาพประกอบธีมจีน/แฟนตาซี</span>
+                    </p>
+                </div>
+
+                <div class="flex flex-wrap justify-center gap-4 sm:gap-6 px-4">
+                    <a href="#pricing" class="px-8 sm:px-9 py-3.5 sm:py-4 bg-gradient-to-r from-ch-crimson to-ch-rust text-white rounded-full font-semibold hover:opacity-95 transition-all shadow-xl hover:shadow-2xl transform hover:-translate-y-1 text-sm sm:text-base">
+                        ดูราคางาน
+                    </a>
+                    <a href="#contact" class="px-8 sm:px-9 py-3.5 sm:py-4 bg-white text-ch-crimson border-2 border-ch-crimson rounded-full font-semibold hover:bg-red-50/50 transition-all shadow-xl hover:shadow-2xl transform hover:-translate-y-1 text-sm sm:text-base">
+                        ติดต่อจ้างงาน
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="portfolio" class="py-20 md:py-28 bg-white/40 backdrop-blur-md px-4">
+            <div class="max-w-6xl mx-auto text-center">
+                <div class="inline-flex items-center justify-center space-x-4 mb-12 w-full">
+                    <div class="h-px w-12 sm:w-20 bg-ch-gold"></div>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-ch-crimson"><i class="fa-solid fa-image mr-2"></i> ผลงานของเรา</h2>
+                    <div class="h-px w-12 sm:w-20 bg-ch-gold"></div>
+                </div>
+                
+                <p class="mb-12 text-gray-600 max-w-xl mx-auto text-sm sm:text-base px-2">สามารถเข้าไปดูตัวอย่างผลงานทั้งหมด ความคมชัดระดับ HD ได้ที่ลิงก์ด้านล่างนี้เลยนะคะ</p>
+                
+                <div id="portfolio-gallery-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 mb-12">
+                    <!-- Dynamic Gallery items -->
+                </div>
+                
+                <a id="display-drive-link" href="https://drive.google.com" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center px-8 sm:px-9 py-4 bg-white border-2 border-ch-gold rounded-full shadow-xl hover:shadow-glow transition-all transform hover:-translate-y-1 text-ink-black font-bold text-sm sm:text-base">
+                    <i class="fa-brands fa-google-drive text-blue-500 text-xl sm:text-2xl mr-3 group-hover:rotate-12 transition-transform"></i> เปิดโฟลเดอร์ผลงานเต็มรูปแบบ
+                </a>
+            </div>
+        </section>
+
+        <section id="pricing" class="py-20 md:py-28 px-4">
+            <div class="max-w-6xl mx-auto">
+                <div class="inline-flex items-center justify-center space-x-4 mb-14 w-full">
+                    <div class="h-px w-12 sm:w-20 bg-ch-gold"></div>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-ch-crimson"><i class="fa-solid fa-coins mr-2"></i> เรทราคางาน</h2>
+                    <div class="h-px w-12 sm:w-20 bg-ch-gold"></div>
+                </div>
+
+                <div id="pricing-cards-container" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Dynamic pricing cards -->
+                </div>
+                
+                <div class="mt-12 text-center text-xs sm:text-sm text-gray-500 px-4">
+                    * ราคาอาจมีการเปลี่ยนแปลงตามความยากง่ายของรายละเอียดชุดและพร็อพนะคะ สอบถามก่อนได้เลยจ้า
+                </div>
+            </div>
+        </section>
+
+        <section id="payment" class="py-20 md:py-28 bg-white/40 backdrop-blur-md px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <div class="inline-flex items-center justify-center space-x-4 mb-12 w-full">
+                    <div class="h-px w-12 sm:w-20 bg-ch-gold"></div>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-ch-crimson"><i class="fa-solid fa-wallet mr-2"></i> ช่องทางการชำระเงิน</h2>
+                    <div class="h-px w-12 sm:w-20 bg-ch-gold"></div>
+                </div>
+
+                <div class="border-chinese p-6 sm:p-12 rounded-3xl shadow-card">
+                    <p class="text-gray-600 mb-8 text-sm sm:text-base font-medium">รบกวนโอนเงินเต็มจำนวนหรือมัดจำ 50% หลังจากบรีฟงานเสร็จสิ้นนะคะ 💖</p>
+                    
+                    <div class="flex flex-col md:flex-row items-center justify-center gap-8 mb-8">
+                        <div class="w-52 h-52 sm:w-56 sm:h-56 bg-white rounded-2xl flex flex-col items-center justify-center border-2 border-dashed border-red-200 overflow-hidden relative shadow-inner p-2">
+                            <img id="display-qr-img" src="https://placehold.co/200x200/ffffff/C12C1F?text=QR+PromptPay" alt="QR Code" class="w-full h-full object-cover rounded-xl" onerror="this.src='https://placehold.co/200x200/ffffff/C12C1F?text=QR+Code'">
+                        </div>
+                        
+                        <div class="text-left space-y-4 w-full md:w-auto">
+                            <div class="flex items-center bg-blue-50/90 p-4 rounded-2xl border border-blue-100 shadow-sm">
+                                <div class="w-12 h-12 bg-blue-500 rounded-2xl flex items-center justify-center text-white mr-4 shrink-0 shadow">
+                                    <i class="fa-solid fa-building-columns text-lg"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-500 font-medium">ธนาคาร (Bank)</p>
+                                    <p id="display-bank-name" class="font-bold text-ink-black text-sm sm:text-base">กสิกรไทย (KBank)</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center bg-white/90 p-4 rounded-2xl border border-gray-200 shadow-sm">
+                                <div class="w-12 h-12 bg-ch-gold rounded-2xl flex items-center justify-center text-white mr-4 shrink-0 shadow">
+                                    <i class="fa-solid fa-hashtag text-lg"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-500 font-medium">เลขบัญชี / พร้อมเพย์</p>
+                                    <p class="font-bold text-ink-black text-sm sm:text-base flex items-center gap-3">
+                                        <span id="display-acc-no">XXX-X-XXXXX-X</span>
+                                        <button onclick="copyAccountInfo()" class="text-gray-400 hover:text-ch-crimson transition-all p-1 hover:scale-110" title="คัดลอกเลขบัญชี">
+                                            <i class="fa-regular fa-copy text-lg"></i>
+                                        </button>
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center bg-white/90 p-4 rounded-2xl border border-gray-200 shadow-sm">
+                                <div class="w-12 h-12 bg-ch-crimson rounded-2xl flex items-center justify-center text-white mr-4 shrink-0 shadow">
+                                    <i class="fa-solid fa-user text-lg"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-500 font-medium">ชื่อบัญชี (Name)</p>
+                                    <p id="display-acc-name" class="font-bold text-ink-black text-sm sm:text-base">น.ส. เมฆา จิ้งจอกขาว (ตัวอย่าง)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="copy-msg" class="hidden bg-emerald-100 text-emerald-800 px-6 py-3.5 rounded-2xl mb-6 text-sm font-semibold transition-all shadow-sm">
+                        ✨ คัดลอกเลขบัญชีแล้วเรียบร้อย!
+                    </div>
+
+                    <a href="#contact" class="inline-block px-8 py-3.5 bg-ch-crimson text-white rounded-full hover:bg-ch-rust transition-all shadow-lg font-semibold text-sm transform hover:-translate-y-0.5">
+                        แจ้งสลิปโอนเงินทางแชท
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="queue" class="py-20 md:py-28 px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="inline-flex items-center justify-center space-x-4 mb-12 w-full">
+                    <div class="h-px w-12 sm:w-20 bg-ch-gold"></div>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-ch-crimson"><i class="fa-solid fa-clipboard-list mr-2"></i> เช็คคิวงาน (Queue)</h2>
+                    <div class="h-px w-12 sm:w-20 bg-ch-gold"></div>
+                </div>
+
+                <div class="border-chinese rounded-3xl shadow-card overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse min-w-[500px]">
+                            <thead>
+                                <tr class="bg-gray-100/90 text-gray-700 text-xs sm:text-sm uppercase tracking-wider">
+                                    <th class="p-4 sm:p-5 font-bold text-center">ลำดับ</th>
+                                    <th class="p-4 sm:p-5 font-bold">ชื่อลูกค้า</th>
+                                    <th class="p-4 sm:p-5 font-bold">ประเภทงาน</th>
+                                    <th class="p-4 sm:p-5 font-bold text-center">สถานะงาน</th>
+                                </tr>
+                            </thead>
+                            <tbody id="queue-table-body" class="divide-y divide-gray-100 text-sm">
+                                <!-- Dynamic Queue Data -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="p-4 bg-gray-50/80 text-xs text-gray-500 text-center border-t border-gray-100 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-circle-notch text-ch-gold animate-spin"></i> ข้อมูลอัปเดตแบบเรียลไทม์จากระบบแอดมิน
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="contact" class="bg-ink-black text-white py-16 px-4 border-t-4 border-ch-gold relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: repeating-linear-gradient(45deg, transparent, transparent 14px, #ffffff 14px, #ffffff 16px);"></div>
+        
+        <div class="max-w-6xl mx-auto relative z-10 text-center">
+            <h2 class="text-3xl font-bold mb-2 font-serif tracking-wider text-ch-gold">Yún Mèng</h2>
+            <p class="text-gray-400 mb-8 text-sm">ช่องทางติดตามและพูดคุย (จ้างงานส่งบรีฟทางนี้ได้เลยน้า)</p>
+            
+            <div class="flex justify-center gap-6 mb-10">
+                <a id="display-ig-link" href="https://www.instagram.com/wf_oo0?stkn=MXd2c292eGNha3liMQ%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" 
+                   class="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center text-3xl hover:bg-gradient-to-tr hover:from-yellow-400 hover:via-ch-crimson hover:to-purple-500 hover:text-white transition-all transform hover:scale-110 shadow-xl">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+                
+                <a id="display-fb-link" href="https://www.facebook.com/profile.php?id=61592606705100" target="_blank" rel="noopener noreferrer" 
+                   class="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center text-3xl hover:bg-blue-600 hover:text-white transition-all transform hover:scale-110 shadow-xl">
+                    <i class="fa-brands fa-facebook-f"></i>
+                </a>
+            </div>
+            
+            <div class="text-gray-500 text-xs border-t border-gray-800 pt-6">
+                &copy; 2026 Yún Mèng Commission. All Rights Reserved. <br>
+                Please do not use my artworks without permission or train them on AI.
+            </div>
+        </div>
+    </footer>
+
+    <div id="admin-login-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border-2 border-ch-gold relative transform transition-all">
+            <button onclick="closeAdminModal()" class="absolute top-5 right-5 text-gray-400 hover:text-ch-crimson text-xl"><i class="fa-solid fa-xmark"></i></button>
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-red-50 text-ch-crimson rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4 shadow-inner">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <h3 class="text-xl sm:text-2xl font-bold text-ink-black">เข้าสู่ระบบแอดมิน</h3>
+                <p class="text-xs text-gray-500 mt-1">กรุณาใส่รหัสผ่านเพื่อจัดการข้อมูลร้านค้า</p>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 mb-1.5">รหัสผ่าน (Password)</label>
+                    <input type="password" id="admin-password-input" placeholder="รหัสผ่าน (ค่าเริ่มต้น: 1234)" class="w-full px-4 py-3 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-ch-crimson text-sm bg-gray-50">
+                </div>
+                <button onclick="verifyAdminPassword()" class="w-full py-3.5 bg-ch-crimson text-white font-semibold rounded-2xl hover:bg-ch-rust transition-all shadow-lg">
+                    เข้าสู่ระบบจัดการ
+                </button>
+                <p id="login-error-msg" class="text-xs text-red-500 text-center font-medium hidden">รหัสผ่านไม่ถูกต้อง!</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="admin-dashboard-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-md hidden flex items-center justify-center p-2 sm:p-4">
+        <div class="bg-gray-50 rounded-3xl max-w-5xl w-full max-h-[92vh] flex flex-col shadow-2xl border-2 border-ch-gold overflow-hidden">
+            <!-- Dashboard Header -->
+            <div class="bg-ink-black text-white px-6 py-5 flex justify-between items-center border-b border-ch-gold/40">
+                <div class="flex items-center gap-3.5">
+                    <div class="w-11 h-11 bg-ch-crimson rounded-xl flex items-center justify-center text-xl shadow">
+                        <i class="fa-solid fa-gears"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-bold text-base sm:text-lg text-ch-gold">ระบบจัดการร้านค้า (Admin Panel)</h2>
+                        <p class="text-xs text-gray-300">แก้ไขข้อมูล รูปภาพ คิวงาน และเรทราคาได้ทั้งหมดในที่เดียว</p>
+                    </div>
+                </div>
+                <button onclick="closeAdminDashboard()" class="text-gray-300 hover:text-white text-2xl px-2"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <!-- Dashboard Navigation Tabs -->
+            <div class="bg-white border-b flex overflow-x-auto px-4 sm:px-6 py-3 gap-3 shrink-0 shadow-sm">
+                <button onclick="switchAdminTab('general')" id="tab-btn-general" class="admin-tab-btn px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-medium bg-ch-crimson text-white transition-all flex items-center gap-2 shrink-0 shadow-sm">
+                    <i class="fa-solid fa-house"></i> ข้อมูลหน้าเว็บหลัก
+                </button>
+                <button onclick="switchAdminTab('portfolio')" id="tab-btn-portfolio" class="admin-tab-btn px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-gray-600 hover:bg-gray-100 transition-all flex items-center gap-2 shrink-0">
+                    <i class="fa-solid fa-image"></i> จัดการผลงาน
+                </button>
+                <button onclick="switchAdminTab('pricing')" id="tab-btn-pricing" class="admin-tab-btn px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-gray-600 hover:bg-gray-100 transition-all flex items-center gap-2 shrink-0">
+                    <i class="fa-solid fa-coins"></i> จัดการเรทราคา
+                </button>
+                <button onclick="switchAdminTab('queue')" id="tab-btn-queue" class="admin-tab-btn px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-gray-600 hover:bg-gray-100 transition-all flex items-center gap-2 shrink-0">
+                    <i class="fa-solid fa-clipboard-list"></i> จัดการคิวงาน
+                </button>
+                <button onclick="switchAdminTab('payment')" id="tab-btn-payment" class="admin-tab-btn px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-gray-600 hover:bg-gray-100 transition-all flex items-center gap-2 shrink-0">
+                    <i class="fa-solid fa-wallet"></i> ข้อมูลชำระเงิน
+                </button>
+            </div>
+
+            <!-- Dashboard Content Body -->
+            <div class="p-4 sm:p-6 overflow-y-auto flex-grow space-y-6">
+                <!-- Tab 1: General Info -->
+                <div id="admin-tab-general" class="admin-tab-content space-y-4">
+                    <div class="bg-white p-5 sm:p-7 rounded-2xl border shadow-sm space-y-5">
+                        <h3 class="font-bold text-sm sm:text-base text-ink-black border-b pb-3 flex items-center gap-2"><i class="fa-solid fa-pen-to-square text-ch-crimson"></i> ข้อความต้อนรับและโปรไฟล์</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1.5">หัวข้อเว็บไซต์ (Title)</label>
+                                <input type="text" id="admin-site-title" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50 focus:ring-2 focus:ring-ch-crimson">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1.5">คำโปรย (Subtitle)</label>
+                                <input type="text" id="admin-site-subtitle" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50 focus:ring-2 focus:ring-ch-crimson">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1.5">ข้อความประกาศหลัก</label>
+                            <textarea id="admin-site-desc" rows="3" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50 focus:ring-2 focus:ring-ch-crimson"></textarea>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1.5">ลิงก์รูปโลโก้หน้าแรก (URL)</label>
+                                <input type="text" id="admin-hero-img" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50 focus:ring-2 focus:ring-ch-crimson">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1.5">ลิงก์ Google Drive รวมผลงาน</label>
+                                <input type="text" id="admin-drive-link" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50 focus:ring-2 focus:ring-ch-crimson">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1.5">ลิงก์ Instagram</label>
+                                <input type="text" id="admin-ig-link" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50 focus:ring-2 focus:ring-ch-crimson">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1.5">ลิงก์ Facebook</label>
+                                <input type="text" id="admin-fb-link" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50 focus:ring-2 focus:ring-ch-crimson">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 2: Portfolio Gallery Management -->
+                <div id="admin-tab-portfolio" class="admin-tab-content hidden space-y-4">
+                    <div class="bg-white p-5 sm:p-7 rounded-2xl border shadow-sm space-y-5">
+                        <div class="flex justify-between items-center border-b pb-3">
+                            <h3 class="font-bold text-sm sm:text-base text-ink-black flex items-center gap-2"><i class="fa-solid fa-image text-ch-crimson"></i> จัดการรูปภาพผลงานในแกลเลอรี</h3>
+                            <button onclick="addPortfolioItemModal()" class="px-4 py-2 bg-ch-crimson text-white text-xs font-semibold rounded-xl hover:bg-ch-rust transition-all flex items-center gap-1.5 shadow">
+                                <i class="fa-solid fa-plus"></i> เพิ่มผลงานใหม่
+                            </button>
+                        </div>
+                        <div id="admin-portfolio-list" class="space-y-3">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 3: Pricing Management -->
+                <div id="admin-tab-pricing" class="admin-tab-content hidden space-y-4">
+                    <div class="bg-white p-5 sm:p-7 rounded-2xl border shadow-sm space-y-5">
+                        <div class="flex justify-between items-center border-b pb-3">
+                            <h3 class="font-bold text-sm sm:text-base text-ink-black flex items-center gap-2"><i class="fa-solid fa-coins text-ch-crimson"></i> จัดการเรทราคา</h3>
+                            <button onclick="addPricingItemModal()" class="px-4 py-2 bg-ch-crimson text-white text-xs font-semibold rounded-xl hover:bg-ch-rust transition-all flex items-center gap-1.5 shadow">
+                                <i class="fa-solid fa-plus"></i> เพิ่มแพ็กเกจราคา
+                            </button>
+                        </div>
+                        <div id="admin-pricing-list" class="space-y-3">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 4: Queue Management -->
+                <div id="admin-tab-queue" class="admin-tab-content hidden space-y-4">
+                    <div class="bg-white p-5 sm:p-7 rounded-2xl border shadow-sm space-y-5">
+                        <div class="flex justify-between items-center border-b pb-3">
+                            <h3 class="font-bold text-sm sm:text-base text-ink-black flex items-center gap-2"><i class="fa-solid fa-clipboard-list text-ch-crimson"></i> จัดการคิวงานลูกค้า</h3>
+                            <button onclick="addQueueItemModal()" class="px-4 py-2 bg-ch-crimson text-white text-xs font-semibold rounded-xl hover:bg-ch-rust transition-all flex items-center gap-1.5 shadow">
+                                <i class="fa-solid fa-plus"></i> เพิ่มคิวงานใหม่
+                            </button>
+                        </div>
+                        <div id="admin-queue-list" class="space-y-3">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 5: Payment Info -->
+                <div id="admin-tab-payment" class="admin-tab-content hidden space-y-4">
+                    <div class="bg-white p-5 sm:p-7 rounded-2xl border shadow-sm space-y-5">
+                        <h3 class="font-bold text-sm sm:text-base text-ink-black border-b pb-3 flex items-center gap-2"><i class="fa-solid fa-wallet text-ch-crimson"></i> ข้อมูลการชำระเงิน</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1.5">ธนาคาร (Bank Name)</label>
+                                <input type="text" id="admin-bank-name" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50 focus:ring-2 focus:ring-ch-crimson">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1.5">เลขบัญชี / พร้อมเพย์</label>
+                                <input type="text" id="admin-acc-no" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50 focus:ring-2 focus:ring-ch-crimson">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1.5">ชื่อบัญชี</label>
+                                <input type="text" id="admin-acc-name" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50 focus:ring-2 focus:ring-ch-crimson">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1.5">ลิงก์รูป QR Code (URL)</label>
+                                <input type="text" id="admin-qr-img" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50 focus:ring-2 focus:ring-ch-crimson">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Footer Actions -->
+            <div class="bg-white px-6 py-4 border-t flex justify-between items-center shrink-0">
+                <span id="save-status-msg" class="text-xs text-emerald-600 font-semibold hidden flex items-center gap-1.5"><i class="fa-solid fa-circle-check"></i> บันทึกข้อมูลสำเร็จแล้ว!</span>
+                <div class="flex gap-3 ml-auto">
+                    <button onclick="closeAdminDashboard()" class="px-5 sm:px-6 py-2.5 bg-gray-200 text-gray-700 rounded-xl text-xs sm:text-sm font-medium hover:bg-gray-300 transition-all">ยกเลิก</button>
+                    <button onclick="saveAllAdminData()" class="px-6 sm:px-7 py-2.5 bg-ch-crimson text-white rounded-xl text-xs sm:text-sm font-semibold hover:bg-ch-rust transition-all shadow-lg">บันทึกข้อมูลทั้งหมด</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="sub-item-modal" class="fixed inset-0 z-60 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border relative">
+            <h3 id="sub-modal-title" class="font-bold text-lg sm:text-xl text-ink-black mb-5">เพิ่มข้อมูล</h3>
+            <div id="sub-modal-form-content" class="space-y-4 mb-6">
+                <!-- Populated dynamically -->
+            </div>
+            <div class="flex justify-end gap-3">
+                <button onclick="closeSubModal()" class="px-5 py-2.5 bg-gray-100 text-gray-700 rounded-xl text-xs sm:text-sm font-medium hover:bg-gray-200">ยกเลิก</button>
+                <button id="sub-modal-save-btn" onclick="saveSubModalData()" class="px-6 py-2.5 bg-ch-crimson text-white rounded-xl text-xs sm:text-sm font-semibold hover:bg-ch-rust shadow">ยืนยัน</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        let defaultAppData = {
+            title: "Yún Mèng",
+            subtitle: "เมฆาแห่งความฝัน",
+            desc: "ยินดีต้อนรับค่า กดเข้ามาแล้วก็ห้ามออก! จ้างเค้า = มีกะตังค์ หยอกเล่งง 😝✨\nรับวาดรูปสไตล์อนิเมะ จิบิ และภาพประกอบธีมจีน/แฟนตาซี",
+            heroImg: "https://placehold.co/180x180/ffffff/C12C1F?text=Fox+Logo",
+            driveLink: "https://www.instagram.com/wf_oo0?stkn=MXd2c292eGNha3liMQ%3D%3D&utm_source=qr",
+            igLink: "https://www.instagram.com/wf_oo0?stkn=MXd2c292eGNha3liMQ%3D%3D&utm_source=qr",
+            fbLink: "https://www.facebook.com/profile.php?id=61592606705100",
+            bankName: "กสิกรไทย (KBank)",
+            accNo: "XXX-X-XXXXX-X",
+            accName: "น.ส. เมฆา จิ้งจอกขาว (ตัวอย่าง)",
+            qrImg: "https://placehold.co/200x200/ffffff/C12C1F?text=QR+PromptPay",
+            portfolio: [
+                { id: 1, title: "ตัวอย่างงานจิบิ 01", url: "https://placehold.co/400x400/C12C1F/ffffff?text=Chibi+Art+1" },
+                { id: 2, title: "ตัวอย่างงานครึ่งตัว 02", url: "https://placehold.co/400x400/E6C567/2A1E1E?text=HalfBody+Art+2" },
+                { id: 3, title: "ตัวอย่างงานเต็มตัว 03", url: "https://placehold.co/400x400/2A1E1E/ffffff?text=FullBody+Art+3" }
+            ],
+            pricing: [
+                { id: 1, name: "ภาพครึ่งตัว (Half Body)", price: "฿500", desc: "วาดบุคคล 1 ตัวละคร / ลงสีเต็มรูปแบบ / พื้นหลังสีพื้น", popular: false },
+                { id: 2, name: "ภาพเต็มตัว (Full Body)", price: "฿800", desc: "ดีเทลชุดจัดเต็ม (ธีมจีน, แฟนตาซี) / ฟรีพร็อพชิ้นเล็ก 1-2 ชิ้น", popular: true },
+                { id: 3, name: "จิบิ (Chibi) / เชิงพาณิชย์", price: "฿350+", desc: "สไตล์จิบิ น่ารักปุ๊กปิ๊ก / เชิงพาณิชย์ (x2 จากราคาปกติ)", popular: false }
+            ],
+            queue: [
+                { id: 1, name: "คุณ K***", type: "Full Body (แฟนตาซี)", status: "กำลังตัดเส้น" },
+                { id: 2, name: "คุณ M***", type: "Chibi x2", status: "ร่างภาพเบื้องต้น" },
+                { id: 3, name: "คุณ T***", type: "Half Body", status: "รอคิว" }
+            ]
+        };
+
+        let appData = JSON.parse(JSON.stringify(defaultAppData));
+        let activeSubModalType = null;
+        let editingSubIndex = null;
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'yun-meng-commission-app';
+        let db, auth;
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            if (typeof __firebase_config !== 'undefined') {
+                try {
+                    const firebaseConfig = JSON.parse(__firebase_config);
+                    const app = initializeApp(firebaseConfig);
+                    db = getFirestore(app);
+                    auth = getAuth(app);
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'store_data');
+                    const docSnap = await getDoc(docRef);
+                    if (docSnap.exists()) {
+                        appData = docSnap.data();
+                    }
+                } catch (e) {
+                    console.log("Using local state fallback", e);
+                }
+            }
+            renderEverything();
+
+            setTimeout(() => {
+                const loader = document.getElementById('page-loader');
+                if (loader) {
+                    loader.style.opacity = '0';
+                    setTimeout(() => loader.remove(), 500);
+                }
+            }, 600);
+        });
+
+        window.renderEverything = function() {
+            document.getElementById('display-title').innerText = appData.title;
+            document.getElementById('display-subtitle').innerText = `"${appData.subtitle}"`;
+            document.getElementById('display-desc').innerHTML = appData.desc.replace(/\n/g, '<br>');
+            document.getElementById('display-hero-img').src = appData.heroImg;
+            document.getElementById('display-drive-link').href = appData.driveLink;
+            document.getElementById('display-ig-link').href = appData.igLink;
+            document.getElementById('display-fb-link').href = appData.fbLink;
+
+            document.getElementById('display-bank-name').innerText = appData.bankName;
+            document.getElementById('display-acc-no').innerText = appData.accNo;
+            document.getElementById('display-acc-name').innerText = appData.accName;
+            document.getElementById('display-qr-img').src = appData.qrImg;
+
+            const galleryEl = document.getElementById('portfolio-gallery-container');
+            galleryEl.innerHTML = appData.portfolio.map((item) => `
+                <div class="bg-white rounded-3xl overflow-hidden shadow-card border border-gray-100 group transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+                    <div class="h-60 sm:h-64 overflow-hidden relative bg-gray-100">
+                        <img src="item.url"alt="{item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/400x400/eee/333?text=Image+Error'">
+                    </div>
+                    <div class="p-5 text-center font-bold text-ink-black text-sm sm:text-base">${item.title}</div>
+                </div>
+            `).join('');
+
+            const pricingEl = document.getElementById('pricing-cards-container');
+            pricingEl.innerHTML = appData.pricing.map(item => `
+                <div class="bg-white rounded-3xl overflow-hidden shadow-${item.popular ? 'glow' : 'card'} transition-all duration-300 hover:-translate-y-2.5 hover:shadow-2xl ${item.popular ? 'border-2 border-ch-crimson transform md:-translate-y-3' : 'border border-gray-100'} relative">
+                    ${item.popular ? '<div class="bg-ch-crimson text-white text-center py-2.5 text-xs font-bold tracking-widest uppercase">ยอดนิยมที่สุด 🌟</div>' : '<div class="h-2.5 bg-ch-gold w-full absolute top-0 left-0"></div>'}
+                    <div class="p-6 sm:p-10">
+                        <h3 class="text-lg sm:text-xl font-bold text-ink-black text-center mb-3">${item.name}</h3>
+                        <div class="text-center mb-6">
+                            <span class="text-3xl sm:text-4xl font-extrabold text-ch-crimson">${item.price}</span>
+                        </div>
+                        <p class="text-xs sm:text-sm text-gray-600 text-center leading-relaxed">${item.desc}</p>
+                    </div>
+                </div>
+            `).join('');
+
+            const queueEl = document.getElementById('queue-table-body');
+            queueEl.innerHTML = appData.queue.map((q, idx) => {
+                let badgeHTML = '';
+                if (q.status.includes('กำลัง') || q.status.includes('ตัดเส้น')) {
+                    badgeHTML = `<span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-amber-50 text-amber-800 border border-amber-200 text-xs rounded-full font-semibold shadow-sm"><span class="w-2.5 h-2.5 rounded-full bg-amber-500 status-dot-red inline-block"></span> ${q.status}</span>`;
+                } else if (q.status.includes('ร่าง')) {
+                    badgeHTML = `<span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-blue-50 text-blue-800 border border-blue-200 text-xs rounded-full font-semibold shadow-sm"><span class="w-2.5 h-2.5 rounded-full bg-blue-500 status-dot-blue inline-block"></span> ${q.status}</span>`;
+                } else if (q.status.includes('เสร็จ')) {
+                    badgeHTML = `<span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs rounded-full font-semibold shadow-sm"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500 status-dot-green inline-block"></span> ${q.status}</span>`;
+                } else {
+                    badgeHTML = `<span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-gray-100 text-gray-700 text-xs rounded-full font-semibold shadow-sm"><span class="w-2.5 h-2.5 rounded-full bg-gray-400 inline-block"></span> ${q.status}</span>`;
+                }
+                return `
+                    <tr class="hover:bg-red-50/40 transition-colors">
+                        <td class="p-4 sm:p-5 text-center font-bold text-ch-crimson">#0${idx + 1}</td>
+                        <td class="p-4 sm:p-5 font-medium text-ink-black">${q.name}</td>
+                        <td class="p-4 sm:p-5 text-gray-600 text-xs sm:text-sm">${q.type}</td>
+                        <td class="p-4 sm:p-5 text-center">${badgeHTML}</td>
+                    </tr>
+                `;
+            }).join('');
+        };
+
+        window.setActiveCapsule = function(el) {
+            document.querySelectorAll('.capsule-nav-item').forEach(item => item.classList.remove('active'));
+            el.classList.add('active');
+        };
+
+        window.openAdminModal = function() {
+            document.getElementById('admin-password-input').value = '';
+            document.getElementById('login-error-msg').classList.add('hidden');
+            document.getElementById('admin-login-modal').classList.remove('hidden');
+        };
+        window.closeAdminModal = function() {
+            document.getElementById('admin-login-modal').classList.add('hidden');
+        };
+        window.verifyAdminPassword = function() {
+            const pass = document.getElementById('admin-password-input').value;
+            if (pass === '1234' || pass === 'admin') {
+                closeAdminModal();
+                openAdminDashboard();
+            } else {
+                document.getElementById('login-error-msg').classList.remove('hidden');
+            }
+        };
+
+        window.openAdminDashboard = function() {
+            document.getElementById('admin-site-title').value = appData.title;
+            document.getElementById('admin-site-subtitle').value = appData.subtitle;
+            document.getElementById('admin-site-desc').value = appData.desc;
+            document.getElementById('admin-hero-img').value = appData.heroImg;
+            document.getElementById('admin-drive-link').value = appData.driveLink;
+            document.getElementById('admin-ig-link').value = appData.igLink;
+            document.getElementById('admin-fb-link').value = appData.fbLink;
+            document.getElementById('admin-bank-name').value = appData.bankName;
+            document.getElementById('admin-acc-no').value = appData.accNo;
+            document.getElementById('admin-acc-name').value = appData.accName;
+            document.getElementById('admin-qr-img').value = appData.qrImg;
+
+            renderAdminSubLists();
+            switchAdminTab('general');
+            document.getElementById('admin-dashboard-modal').classList.remove('hidden');
+        };
+        window.closeAdminDashboard = function() {
+            document.getElementById('admin-dashboard-modal').classList.add('hidden');
+        };
+
+        window.switchAdminTab = function(tabName) {
+            document.querySelectorAll('.admin-tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+                btn.classList.remove('bg-ch-crimson', 'text-white', 'shadow-sm');
+                btn.classList.add('text-gray-600', 'hover:bg-gray-100');
+            });
+
+            document.getElementById(`admin-tab-${tabName}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`tab-btn-${tabName}`);
+            activeBtn.classList.remove('text-gray-600', 'hover:bg-gray-100');
+            activeBtn.classList.add('bg-ch-crimson', 'text-white', 'shadow-sm');
+        };
+
+        window.renderAdminSubLists = function() {
+            document.getElementById('admin-portfolio-list').innerHTML = appData.portfolio.map((item, idx) => `
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-gray-50 rounded-2xl border transition-all hover:bg-gray-100 gap-3">
+                    <div class="flex items-center gap-4">
+                        <img src="${item.url}" class="w-14 h-14 object-cover rounded-xl shadow-sm shrink-0" onerror="this.src='https://placehold.co/50x50/eee/333?text=Err'">
+                        <div class="overflow-hidden">
+                            <p class="font-bold text-sm text-ink-black truncate">${item.title}</p>
+                            <p class="text-xs text-gray-400 truncate max-w-xs sm:max-w-sm">${item.url}</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-2 self-end sm:self-center shrink-0">
+                        <button onclick="editPortfolioItem(${idx})" class="px-3 py-1.5 bg-blue-100 text-blue-700 text-xs font-semibold rounded-xl hover:bg-blue-200 transition-all">แก้ไข</button>
+                        <button onclick="deletePortfolioItem(${idx})" class="px-3 py-1.5 bg-red-100 text-red-700 text-xs font-semibold rounded-xl hover:bg-red-200 transition-all">ลบ</button>
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('admin-pricing-list').innerHTML = appData.pricing.map((item, idx) => `
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-gray-50 rounded-2xl border transition-all hover:bg-gray-100 gap-3">
+                    <div>
+                        <div class="flex items-center gap-2 mb-1 flex-wrap">
+                            <p class="font-bold text-sm text-ink-black">item.name({item.price})</p>
+                            ${item.popular ? '<span class="bg-ch-crimson text-white text-[10px] px-2 py-0.5 rounded-full font-semibold">ยอดนิยม</span>' : ''}
+                        </div>
+                        <p class="text-xs text-gray-500">${item.desc}</p>
+                    </div>
+                    <div class="flex gap-2 self-end sm:self-center shrink-0">
+                        <button onclick="editPricingItem(${idx})" class="px-3 py-1.5 bg-blue-100 text-blue-700 text-xs font-semibold rounded-xl hover:bg-blue-200 transition-all">แก้ไข</button>
+                        <button onclick="deletePricingItem(${idx})" class="px-3 py-1.5 bg-red-100 text-red-700 text-xs font-semibold rounded-xl hover:bg-red-200 transition-all">ลบ</button>
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('admin-queue-list').innerHTML = appData.queue.map((q, idx) => `
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-gray-50 rounded-2xl border transition-all hover:bg-gray-100 gap-3">
+                    <div>
+                        <p class="font-bold text-sm text-ink-black">#0${idx + 1} - q.name<spanclass="text-xstext-ch-crimsonfont-normal">({q.type})</span></p>
+                        <p class="text-xs text-gray-500 mt-0.5">สถานะ: <span class="font-semibold text-ink-black">${q.status}</span></p>
+                    </div>
+                    <div class="flex gap-2 self-end sm:self-center shrink-0">
+                        <button onclick="editQueueItem(${idx})" class="px-3 py-1.5 bg-blue-100 text-blue-700 text-xs font-semibold rounded-xl hover:bg-blue-200 transition-all">แก้ไข</button>
+                        <button onclick="deleteQueueItem(${idx})" class="px-3 py-1.5 bg-red-100 text-red-700 text-xs font-semibold rounded-xl hover:bg-red-200 transition-all">ลบ</button>
+                    </div>
+                </div>
+            `).join('');
+        };
+
+        window.addPortfolioItemModal = function() {
+            activeSubModalType = 'portfolio';
+            editingSubIndex = null;
+            document.getElementById('sub-modal-title').innerText = 'เพิ่มผลงานใหม่';
+            document.getElementById('sub-modal-form-content').innerHTML = `
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 mb-1">ชื่อผลงาน</label>
+                    <input type="text" id="sub-input-1" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50" placeholder="เช่น ตัวอย่างงาน Fullbody">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 mb-1">ลิงก์รูปภาพ (Image URL)</label>
+                    <input type="text" id="sub-input-2" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50" placeholder="https://...">
+                </div>
+            `;
+            document.getElementById('sub-item-modal').classList.remove('hidden');
+        };
+
+        window.editPortfolioItem = function(idx) {
+            activeSubModalType = 'portfolio';
+            editingSubIndex = idx;
+            const item = appData.portfolio[idx];
+            document.getElementById('sub-modal-title').innerText = 'แก้ไขผลงาน';
+            document.getElementById('sub-modal-form-content').innerHTML = `
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 mb-1">ชื่อผลงาน</label>
+                    <input type="text" id="sub-input-1" value="${item.title}" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 mb-1">ลิงก์รูปภาพ (Image URL)</label>
+                    <input type="text" id="sub-input-2" value="${item.url}" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50">
+                </div>
+            `;
+            document.getElementById('sub-item-modal').classList.remove('hidden');
+        };
+
+        window.deletePortfolioItem = function(idx) {
+            appData.portfolio.splice(idx, 1);
+            renderAdminSubLists();
+        };
+
+        window.addPricingItemModal = function() {
+            activeSubModalType = 'pricing';
+            editingSubIndex = null;
+            document.getElementById('sub-modal-title').innerText = 'เพิ่มแพ็กเกจราคา';
+            document.getElementById('sub-modal-form-content').innerHTML = `
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 mb-1">ชื่อแพ็กเกจ</label>
+                    <input type="text" id="sub-input-1" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50" placeholder="เช่น ภาพครึ่งตัว">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 mb-1">ราคา</label>
+                    <input type="text" id="sub-input-2" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50" placeholder="เช่น ฿500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 mb-1">รายละเอียด</label>
+                    <input type="text" id="sub-input-3" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50" placeholder="เงื่อนไขหรืองานที่ได้รับ">
+                </div>
+                <div class="flex items-center gap-2.5 pt-2">
+                    <input type="checkbox" id="sub-input-4" class="w-4 h-4 rounded text-ch-crimson">
+                    <label class="text-xs font-semibold text-gray-700">ตั้งเป็นแพ็กเกจยอดนิยม (ไฮไลต์)</label>
+                </div>
+            `;
+            document.getElementById('sub-item-modal').classList.remove('hidden');
+        };
+
+        window.editPricingItem = function(idx) {
+            activeSubModalType = 'pricing';
+            editingSubIndex = idx;
+            const item = appData.pricing[idx];
+            document.getElementById('sub-modal-title').innerText = 'แก้ไขแพ็กเกจราคา';
+            document.getElementById('sub-modal-form-content').innerHTML = `
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 mb-1">ชื่อแพ็กเกจ</label>
+                    <input type="text" id="sub-input-1" value="${item.name}" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 mb-1">ราคา</label>
+                    <input type="text" id="sub-input-2" value="${item.price}" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 mb-1">รายละเอียด</label>
+                    <input type="text" id="sub-input-3" value="${item.desc}" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50">
+                </div>
+                <div class="flex items-center gap-2.5 pt-2">
+                    <input type="checkbox" id="sub-input-4" ${item.popular ? 'checked' : ''} class="w-4 h-4 rounded text-ch-crimson">
+                    <label class="text-xs font-semibold text-gray-700">ตั้งเป็นแพ็กเกจยอดนิยม (ไฮไลต์)</label>
+                </div>
+            `;
+            document.getElementById('sub-item-modal').classList.remove('hidden');
+        };
+
+        window.deletePricingItem = function(idx) {
+            appData.pricing.splice(idx, 1);
+            renderAdminSubLists();
+        };
+
+        window.addQueueItemModal = function() {
+            activeSubModalType = 'queue';
+            editingSubIndex = null;
+            document.getElementById('sub-modal-title').innerText = 'เพิ่มคิวงานใหม่';
+            document.getElementById('sub-modal-form-content').innerHTML = `
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 mb-1">ชื่อลูกค้า (นามแฝง)</label>
+                    <input type="text" id="sub-input-1" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50" placeholder="เช่น คุณ K***">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 mb-1">ประเภทงาน</label>
+                    <input type="text" id="sub-input-2" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50" placeholder="เช่น Full Body">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 mb-1">สถานะ</label>
+                    <input type="text" id="sub-input-3" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50" placeholder="เช่น กำลังตัดเส้น / รอคิว">
+                </div>
+            `;
+            document.getElementById('sub-item-modal').classList.remove('hidden');
+        };
+
+        window.editQueueItem = function(idx) {
+            activeSubModalType = 'queue';
+            editingSubIndex = idx;
+            const q = appData.queue[idx];
+            document.getElementById('sub-modal-title').innerText = 'แก้ไขคิวงาน';
+            document.getElementById('sub-modal-form-content').innerHTML = `
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 mb-1">ชื่อลูกค้า (นามแฝง)</label>
+                    <input type="text" id="sub-input-1" value="${q.name}" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 mb-1">ประเภทงาน</label>
+                    <input type="text" id="sub-input-2" value="${q.type}" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 mb-1">สถานะ</label>
+                    <input type="text" id="sub-input-3" value="${q.status}" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50">
+                </div>
+            `;
+            document.getElementById('sub-item-modal').classList.remove('hidden');
+        };
+
+        window.deleteQueueItem = function(idx) {
+            appData.queue.splice(idx, 1);
+            renderAdminSubLists();
+        };
+
+        window.closeSubModal = function() {
+            document.getElementById('sub-item-modal').classList.add('hidden');
+        };
+
+        window.saveSubModalData = function() {
+            const v1 = document.getElementById('sub-input-1')?.value || '';
+            const v2 = document.getElementById('sub-input-2')?.value || '';
+            const v3 = document.getElementById('sub-input-3')?.value || '';
+            const v4 = document.getElementById('sub-input-4')?.checked || false;
+
+            if (activeSubModalType === 'portfolio') {
+                if (editingSubIndex !== null) {
+                    appData.portfolio[editingSubIndex] = { id: appData.portfolio[editingSubIndex].id, title: v1, url: v2 };
+                } else {
+                    appData.portfolio.push({ id: Date.now(), title: v1, url: v2 });
+                }
+            } else if (activeSubModalType === 'pricing') {
+                if (editingSubIndex !== null) {
+                    appData.pricing[editingSubIndex] = { id: appData.pricing[editingSubIndex].id, name: v1, price: v2, desc: v3, popular: v4 };
+                } else {
+                    appData.pricing.push({ id: Date.now(), name: v1, price: v2, desc: v3, popular: v4 });
+                }
+            } else if (activeSubModalType === 'queue') {
+                if (editingSubIndex !== null) {
+                    appData.queue[editingSubIndex] = { id: appData.queue[editingSubIndex].id, name: v1, type: v2, status: v3 };
+                } else {
+                    appData.queue.push({ id: Date.now(), name: v1, type: v2, status: v3 });
+                }
+            }
+            closeSubModal();
+            renderAdminSubLists();
+        };
+
+        window.saveAllAdminData = async function() {
+            appData.title = document.getElementById('admin-site-title').value;
+            appData.subtitle = document.getElementById('admin-site-subtitle').value;
+            appData.desc = document.getElementById('admin-site-desc').value;
+            appData.heroImg = document.getElementById('admin-hero-img').value;
+            appData.driveLink = document.getElementById('admin-drive-link').value;
+            appData.igLink = document.getElementById('admin-ig-link').value;
+            appData.fbLink = document.getElementById('admin-fb-link').value;
+            appData.bankName = document.getElementById('admin-bank-name').value;
+            appData.accNo = document.getElementById('admin-acc-no').value;
+            appData.accName = document.getElementById('admin-acc-name').value;
+            appData.qrImg = document.getElementById('admin-qr-img').value;
+
+            if (db && auth && auth.currentUser) {
+                try {
+                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'store_data');
+                    await setDoc(docRef, appData);
+                } catch (e) {
+                    console.log("Error saving to Firestore", e);
+                }
+            }
+
+            renderEverything();
+
+            const msg = document.getElementById('save-status-msg');
+            msg.classList.remove('hidden');
+            setTimeout(() => {
+                msg.classList.add('hidden');
+                closeAdminDashboard();
+            }, 1200);
+        };
+
+        window.copyAccountInfo = function() {
+            const accText = document.getElementById('display-acc-no').innerText;
+            const msgBox = document.getElementById('copy-msg');
+            msgBox.classList.remove('hidden');
+            setTimeout(() => {
+                msgBox.classList.add('hidden');
+            }, 3000);
+        };
+
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        if (btn && menu) {
+            btn.addEventListener('click', () => {
+                menu.classList.toggle('hidden');
+            });
+            document.querySelectorAll('.mobile-link').forEach(l => {
+                l.addEventListener('click', () => menu.classList.add('hidden'));
+            });
+        }
+    </script>
+</body>
+</html>
+
