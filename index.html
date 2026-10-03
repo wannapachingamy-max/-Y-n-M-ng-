@@ -15,11 +15,11 @@
                         sans: ['Prompt', 'sans-serif'],
                     },
                     colors: {
-                        'ch-bg': '#FFF9F2',          /* Floral White */
-                        'ch-pink': '#FFCAD0',        /* Pastel Pink */
-                        'ch-red': '#F10222',         /* Racing Red */
-                        'ch-berry': '#892325',       /* Crushed Berry */
-                        'ink-black': '#250202'       /* Rich Mahogany */
+                        'ch-bg': '#FFF9F2',
+                        'ch-pink': '#FFCAD0',
+                        'ch-red': '#F10222',
+                        'ch-berry': '#892325',
+                        'ink-black': '#250202'
                     },
                     boxShadow: {
                         'glow': '0 0 30px rgba(241, 2, 34, 0.3)',
@@ -36,7 +36,6 @@
             color: #250202;
             overflow-x: hidden;
         }
-
         .animated-bg {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -120,33 +119,11 @@
             transform: translateY(-2px);
         }
 
-        @keyframes statusPulseRed {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(241, 2, 34, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(241, 2, 34, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(241, 2, 34, 0); }
-        }
-        .status-dot-red { animation: statusPulseRed 2s infinite; }
-
-        @keyframes statusPulseBlue {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
-        }
-        .status-dot-blue { animation: statusPulseBlue 2s infinite; }
-
-        @keyframes statusPulseGreen {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
-        }
-        .status-dot-green { animation: statusPulseGreen 2s infinite; }
-
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: #FFF9F2; }
         ::-webkit-scrollbar-thumb { background: #892325; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #F10222; }
 
-        /* Badge Colors for Archive */
         .badge-type { background-color: #f3e8ff; color: #7e22ce; border: 1px solid #d8b4fe; }
         .badge-status-available { background-color: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
         .badge-status-reserved { background-color: #fef9c3; color: #854d0e; border: 1px solid #fef08a; }
@@ -154,7 +131,6 @@
         .badge-status-pending { background-color: #ffedd5; color: #9a3412; border: 1px solid #fed7aa; }
         .badge-status-transferred { background-color: #f3f4f6; color: #374151; border: 1px solid #e5e7eb; }
         
-        /* Queue Table Styles */
         .queue-table-row {
             transition: all 0.2s ease-in-out;
             border-bottom: 1px solid rgba(255, 202, 208, 0.4);
@@ -379,7 +355,6 @@
                 <p class="mb-10 text-gray-600 max-w-2xl mx-auto text-center text-sm sm:text-base px-2">คลังเก็บตัวละครที่เปิดให้ Adopt, รับข้อเสนอ (OTA) หรือแจกฟรี สามารถเช็คสถานะและรายละเอียดของน้องๆ แต่ละตัวได้ที่นี่ค่ะ</p>
 
                 <div id="archive-gallery-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-                    <!-- Cards will be injected here -->
                     <div class="col-span-full py-12 text-center text-gray-400 text-sm">กำลังโหลดคลังตัวละคร...</div>
                 </div>
             </div>
@@ -477,7 +452,6 @@
                 </div>
 
                 <div class="bg-white/90 backdrop-blur-md rounded-3xl shadow-[0_8px_30px_rgb(137,35,37,0.12)] border border-ch-pink/50 overflow-hidden relative">
-                    <!-- Top decorative red bar -->
                     <div class="h-2 w-full bg-gradient-to-r from-ch-red via-ch-berry to-ch-red"></div>
                     
                     <div class="overflow-x-auto">
@@ -536,7 +510,6 @@
         </div>
     </footer>
 
-    <!-- Admin Login Modal -->
     <div id="admin-login-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-md hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border-2 border-ch-pink relative transform transition-all">
             <button onclick="closeAdminModal()" class="absolute top-5 right-5 text-gray-400 hover:text-ch-red text-xl"><i class="fa-solid fa-xmark"></i></button>
@@ -564,7 +537,6 @@
         </div>
     </div>
 
-    <!-- Admin Dashboard Modal -->
     <div id="admin-dashboard-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-md hidden flex items-center justify-center p-2 sm:p-4">
         <div class="bg-gray-50 rounded-3xl max-w-5xl w-full max-h-[92vh] flex flex-col shadow-2xl border-2 border-ch-pink overflow-hidden">
             <div class="bg-ink-black text-white px-6 py-5 flex justify-between items-center border-b border-ch-pink/30">
@@ -625,9 +597,8 @@
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-xs font-semibold text-gray-700 mb-1.5">อัปโหลดรูปโลโกหน้าแรก</label>
-                                <input type="file" id="admin-hero-file" accept="image/*" class="w-full px-3 py-2 border rounded-xl text-xs bg-gray-50 mb-2">
-                                <input type="text" id="admin-hero-img" placeholder="หรือใส่ลิงก์รูปภาพตรงนี้" class="w-full px-4 py-2 border rounded-xl text-xs bg-gray-50">
+                                <label class="block text-xs font-semibold text-gray-700 mb-1.5">รูปลิงก์ โลโกหน้าแรก</label>
+                                <input type="text" id="admin-hero-img" placeholder="ใส่ลิงก์รูปภาพตรงนี้ (เช่น imgur, google drive)" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50 focus:ring-2 focus:ring-ch-red">
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold text-gray-700 mb-1.5">ลิงก์ Google Drive รวมผลงาน</label>
@@ -637,11 +608,11 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-xs font-semibold text-gray-700 mb-1.5">ลิงก์ Instagram</label>
-                                <input type="text" id="admin-ig-link" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50 focus:ring-2 focus:ring-ch-red">
+                                <input type="text" id="admin-ig-link" placeholder="instagram.com/your_name" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50 focus:ring-2 focus:ring-ch-red">
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold text-gray-700 mb-1.5">ลิงก์ Facebook</label>
-                                <input type="text" id="admin-fb-link" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50 focus:ring-2 focus:ring-ch-red">
+                                <input type="text" id="admin-fb-link" placeholder="facebook.com/your_name" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50 focus:ring-2 focus:ring-ch-red">
                             </div>
                         </div>
                     </div>
@@ -669,7 +640,6 @@
                                 <i class="fa-solid fa-plus"></i> เพิ่มตัวละคร
                             </button>
                         </div>
-                        <p class="text-xs text-gray-500">ตาราง: `character_archives` (id, name, image_url, description, type, status, sort_order)</p>
                         <div id="admin-archive-list" class="space-y-3"></div>
                     </div>
                 </div>
@@ -720,9 +690,8 @@
                                 <input type="text" id="admin-acc-name" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50 focus:ring-2 focus:ring-ch-red">
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold text-gray-700 mb-1.5">อัปโหลดรูป QR Code</label>
-                                <input type="file" id="admin-qr-file" accept="image/*" class="w-full px-3 py-2 border rounded-xl text-xs bg-gray-50 mb-2">
-                                <input type="text" id="admin-qr-img" placeholder="หรือใส่ลิงก์ QR Code ตรงนี้" class="w-full px-4 py-2 border rounded-xl text-xs bg-gray-50">
+                                <label class="block text-xs font-semibold text-gray-700 mb-1.5">ลิงก์รูป QR Code</label>
+                                <input type="text" id="admin-qr-img" placeholder="ใส่ลิงก์ QR Code ตรงนี้" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50 focus:ring-2 focus:ring-ch-red">
                             </div>
                         </div>
                     </div>
@@ -732,14 +701,13 @@
             <div class="bg-white px-6 py-4 border-t flex justify-between items-center shrink-0">
                 <span id="save-status-msg" class="text-xs text-emerald-600 font-semibold hidden flex items-center gap-1.5"><i class="fa-solid fa-circle-check"></i> บันทึกข้อมูลสำเร็จแล้ว!</span>
                 <div class="flex gap-3 ml-auto">
-                    <button onclick="closeAdminDashboard()" class="px-5 sm:px-6 py-2.5 bg-gray-200 text-gray-700 rounded-xl text-xs sm:text-sm font-medium hover:bg-gray-300 transition-all">ยกเลิก</button>
+                    <button onclick="closeAdminDashboard()" class="px-5 sm:px-6 py-2.5 bg-gray-200 text-gray-700 rounded-xl text-xs sm:text-sm font-medium hover:bg-gray-300 transition-all">ปิด</button>
                     <button id="save-all-btn" onclick="saveAllAdminData()" class="px-6 sm:px-7 py-2.5 bg-ch-red text-white rounded-xl text-xs sm:text-sm font-semibold hover:bg-ch-berry transition-all shadow-lg">บันทึกข้อมูลหน้าเว็บและชำระเงิน</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Sub Item Modal -->
     <div id="sub-item-modal" class="fixed inset-0 z-[90] bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl border-2 border-ch-pink relative max-h-[90vh] overflow-y-auto">
             <h3 id="sub-modal-title" class="font-bold text-lg sm:text-xl text-ink-black mb-5">เพิ่มข้อมูล</h3>
@@ -780,15 +748,23 @@
             ],
             pricing: [],
             queue: [
-                // Mock Data fallback in case missing columns
-                { id: 'q1', customer_name: 'คุณ A', work_type: 'Full Body', stage: 'ร่างภาพ', is_personal: true, is_commercial: false, payment_status: 'มัดจำแล้ว', brief_status: 'ส่งแล้ว', status: 'กำลังดำเนินการ', progress: 30 },
-                { id: 'q2', customer_name: 'คุณ B', work_type: 'Chibi', stage: 'ลงสี', is_personal: false, is_commercial: true, payment_status: 'จ่ายเต็ม', brief_status: 'ส่งแล้ว', status: 'ใกล้เสร็จ', progress: 85 }
+                { id: 'q1', customer_name: 'คุณ A', work_type: 'Full Body', stage: 'ร่างภาพ', is_personal: true, is_commercial: false, payment_status: 'มัดจำแล้ว', brief_status: 'ส่งแล้ว', status: 'กำลังดำเนินการ', progress: 30 }
             ]
         };
 
         let currentAdminUser = null;
         let activeSubModalType = null;
         let editingSubId = null;
+
+        // Helper function to format URL (adds https:// if missing)
+        function formatURL(url) {
+            if (!url || url.trim() === '' || url === '#') return '#';
+            let formatted = url.trim();
+            if (!/^https?:\/\//i.test(formatted)) {
+                formatted = 'https://' + formatted;
+            }
+            return formatted;
+        }
 
         window.addEventListener('DOMContentLoaded', async () => {
             await fetchAllData();
@@ -827,21 +803,13 @@
 
                 try {
                     const { data: queueData, error } = await supabase.from('queues').select('*').order('sort_order', { ascending: true });
-                    if (queueData && !error) {
-                        appData.queue = queueData;
-                    }
-                } catch (e) {
-                    console.log("Using local mock data for queue if DB misses new columns.");
-                }
+                    if (queueData && !error) appData.queue = queueData;
+                } catch (e) { console.log("Using local queue data"); }
                 
                 try {
                     const { data: archiveData, error } = await supabase.from('character_archives').select('*').order('sort_order', { ascending: true });
-                    if (archiveData && !error) {
-                        appData.archive = archiveData;
-                    }
-                } catch (e) {
-                    console.log("Archive table might not exist yet.");
-                }
+                    if (archiveData && !error) appData.archive = archiveData;
+                } catch (e) { console.log("Using local archive data"); }
 
             } catch (err) {
                 console.error("Error fetching data:", err);
@@ -854,9 +822,12 @@
             document.getElementById('display-subtitle').textContent = `"${appData.subtitle}"`;
             document.getElementById('display-desc').innerHTML = (appData.desc || '').replace(/\n/g, '<br>');
             if (appData.heroImg) document.getElementById('display-hero-img').src = appData.heroImg;
-            document.getElementById('display-drive-link').href = appData.driveLink || '#';
-            document.getElementById('display-ig-link').href = appData.igLink || '#';
-            document.getElementById('display-fb-link').href = appData.fbLink || '#';
+            
+            // Format links before displaying
+            document.getElementById('display-drive-link').href = formatURL(appData.driveLink);
+            document.getElementById('display-ig-link').href = formatURL(appData.igLink);
+            document.getElementById('display-fb-link').href = formatURL(appData.fbLink);
+            
             document.getElementById('display-bank-name').textContent = appData.bankName || '-';
             document.getElementById('display-acc-no').textContent = appData.accNo || '-';
             document.getElementById('display-acc-name').textContent = appData.accName || '-';
@@ -938,7 +909,6 @@
                     const progress = q.progress || 0;
                     const pbColor = progress >= 100 ? 'from-emerald-400 to-green-500' : 'from-ch-red to-ch-berry';
                     
-                    // Status Badge
                     let badgeHTML = '';
                     const st = q.status || '';
                     if (st.includes('กำลัง') || st.includes('เส้น')) {
@@ -953,9 +923,7 @@
 
                     return `
                         <tr class="queue-table-row bg-white hover:bg-red-50/20">
-                            <td class="p-4 text-center font-bold">
-                                <span class="bg-ch-red text-white px-2 py-0.5 rounded shadow-sm">#${rowNum}</span>
-                            </td>
+                            <td class="p-4 text-center font-bold"><span class="bg-ch-red text-white px-2 py-0.5 rounded shadow-sm">#${rowNum}</span></td>
                             <td class="p-4 font-bold text-ink-black whitespace-nowrap">${q.customer_name || '-'}</td>
                             <td class="p-4 text-gray-700 text-sm font-medium">${q.work_type || '-'}</td>
                             <td class="p-4 text-gray-600 text-sm whitespace-nowrap">${q.stage || '-'}</td>
@@ -988,12 +956,9 @@
         window.openAdminModal = async function() {
             const { data: { session } } = await supabase.auth.getSession();
             if (session) {
-                const { data: adminCheck } = await supabase.rpc('is_admin');
-                if (adminCheck) {
-                    currentAdminUser = session.user;
-                    openAdminDashboard();
-                    return;
-                }
+                currentAdminUser = session.user;
+                openAdminDashboard();
+                return;
             }
             document.getElementById('admin-email-input').value = '';
             document.getElementById('admin-password-input').value = '';
@@ -1029,16 +994,6 @@
                 return;
             }
 
-            const { data: isAdmin, error: adminErr } = await supabase.rpc('is_admin');
-            if (adminErr || !isAdmin) {
-                await supabase.auth.signOut();
-                document.getElementById('login-error-msg').textContent = 'บัญชีนี้ไม่มีสิทธิ์แอดมิน!';
-                document.getElementById('login-error-msg').classList.remove('hidden');
-                btn.disabled = false;
-                btn.textContent = 'เข้าสู่ระบบจัดการ';
-                return;
-            }
-
             currentAdminUser = data.session.user;
             closeAdminModal();
             openAdminDashboard();
@@ -1057,7 +1012,6 @@
             document.getElementById('admin-site-subtitle').value = appData.subtitle;
             document.getElementById('admin-site-desc').value = appData.desc;
             document.getElementById('admin-hero-img').value = appData.heroImg;
-            document.getElementById('admin-hero-file').value = '';
             document.getElementById('admin-drive-link').value = appData.driveLink;
             document.getElementById('admin-ig-link').value = appData.igLink;
             document.getElementById('admin-fb-link').value = appData.fbLink;
@@ -1065,7 +1019,6 @@
             document.getElementById('admin-acc-no').value = appData.accNo;
             document.getElementById('admin-acc-name').value = appData.accName;
             document.getElementById('admin-qr-img').value = appData.qrImg;
-            document.getElementById('admin-qr-file').value = '';
 
             renderAdminSubLists();
             switchAdminTab('general');
@@ -1140,6 +1093,7 @@
                     <div class="flex items-center justify-between p-4 bg-gray-50 rounded-2xl border gap-3">
                         <div class="overflow-hidden">
                             <p class="font-bold text-sm">${item.name} <span class="text-ch-red">(${item.price})</span></p>
+                            <p class="text-[10px] text-gray-500">${item.popular ? '🌟 ยอดนิยม' : 'ธรรมดา'}</p>
                         </div>
                         <div class="flex gap-2 shrink-0">
                             <button onclick="editPricingItem('${item.id}')" class="px-3 py-1.5 bg-blue-100 text-blue-700 text-xs rounded-xl">แก้ไข</button>
@@ -1169,7 +1123,6 @@
             }
         };
 
-        // Modals Generate Functions
         window.openPortfolioModal = function() {
             activeSubModalType = 'portfolio'; editingSubId = null;
             document.getElementById('sub-modal-title').textContent = 'เพิ่มผลงานใหม่';
@@ -1179,15 +1132,89 @@
                     <input type="text" id="sub-input-1" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-gray-700 mb-1">อัปโหลดรูปภาพ</label>
-                    <input type="file" id="sub-file-input" accept="image/*" class="w-full px-3 py-2 border rounded-xl text-xs bg-gray-50 mb-2">
-                    <input type="text" id="sub-input-2" placeholder="หรือใส่ลิงก์" class="w-full px-4 py-2 border rounded-xl text-xs bg-gray-50">
+                    <label class="block text-xs font-semibold text-gray-700 mb-1">ลิงก์รูปภาพ (URL)</label>
+                    <input type="text" id="sub-input-2" placeholder="ใส่ลิงก์รูปที่ฝากไว้ เช่น imgur" class="w-full px-4 py-2 border rounded-xl text-xs bg-gray-50">
                 </div>`;
             document.getElementById('sub-item-modal').classList.remove('hidden');
         };
-        window.editPortfolioItem = function(id) { /*...similar to old code...*/ };
-        window.deletePortfolioItem = async function(id) { /*...similar to old code...*/ };
+
+        window.editPortfolioItem = function(id) {
+            activeSubModalType = 'portfolio'; editingSubId = id;
+            const item = appData.portfolio.find(p => p.id === id);
+            document.getElementById('sub-modal-title').textContent = 'แก้ไขผลงาน';
+            document.getElementById('sub-modal-form-content').innerHTML = `
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 mb-1">ชื่อผลงาน</label>
+                    <input type="text" id="sub-input-1" value="${item.title}" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 mb-1">ลิงก์รูปภาพ (URL)</label>
+                    <input type="text" id="sub-input-2" value="${item.url}" class="w-full px-4 py-2 border rounded-xl text-xs bg-gray-50">
+                </div>`;
+            document.getElementById('sub-item-modal').classList.remove('hidden');
+        };
         
+        window.deletePortfolioItem = async function(id) {
+            try { await supabase.from('portfolios').delete().eq('id', id); } catch(e){}
+            appData.portfolio = appData.portfolio.filter(p => p.id !== id);
+            renderAdminSubLists();
+            renderEverything();
+        };
+
+        window.openPricingModal = function() {
+            activeSubModalType = 'pricing'; editingSubId = null;
+            document.getElementById('sub-modal-title').textContent = 'เพิ่มแพ็กเกจราคา';
+            document.getElementById('sub-modal-form-content').innerHTML = `
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 mb-1">ชื่อแพ็กเกจ (เช่น Chibi, Full Body)</label>
+                    <input type="text" id="p-name" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 mb-1">ราคา</label>
+                    <input type="text" id="p-price" placeholder="เช่น 300 THB" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 mb-1">รายละเอียด</label>
+                    <textarea id="p-desc" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50"></textarea>
+                </div>
+                <div class="flex items-center gap-2 mt-2">
+                    <input type="checkbox" id="p-popular" class="w-4 h-4 text-ch-red rounded border-gray-300">
+                    <label class="text-xs font-semibold text-gray-700">ไฮไลต์ยอดนิยม</label>
+                </div>`;
+            document.getElementById('sub-item-modal').classList.remove('hidden');
+        };
+
+        window.editPricingItem = function(id) {
+            activeSubModalType = 'pricing'; editingSubId = id;
+            const item = appData.pricing.find(p => p.id === id);
+            document.getElementById('sub-modal-title').textContent = 'แก้ไขแพ็กเกจราคา';
+            document.getElementById('sub-modal-form-content').innerHTML = `
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 mb-1">ชื่อแพ็กเกจ</label>
+                    <input type="text" id="p-name" value="${item.name}" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 mb-1">ราคา</label>
+                    <input type="text" id="p-price" value="${item.price}" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 mb-1">รายละเอียด</label>
+                    <textarea id="p-desc" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50">${item.description}</textarea>
+                </div>
+                <div class="flex items-center gap-2 mt-2">
+                    <input type="checkbox" id="p-popular" ${item.popular ? 'checked' : ''} class="w-4 h-4 text-ch-red rounded border-gray-300">
+                    <label class="text-xs font-semibold text-gray-700">ไฮไลต์ยอดนิยม</label>
+                </div>`;
+            document.getElementById('sub-item-modal').classList.remove('hidden');
+        };
+
+        window.deletePricingItem = async function(id) {
+            try { await supabase.from('pricings').delete().eq('id', id); } catch(e){}
+            appData.pricing = appData.pricing.filter(p => p.id !== id);
+            renderAdminSubLists();
+            renderEverything();
+        };
+
         window.openArchiveModal = function() {
             activeSubModalType = 'archive'; editingSubId = null;
             document.getElementById('sub-modal-title').textContent = 'เพิ่มตัวละคร Archive';
@@ -1206,7 +1233,7 @@
             const statuses = ['ว่าง', 'จอง', 'ได้บ้าน', 'รอชำระเงิน', 'ถูกส่งต่อ'];
             return `
                 <div><label class="block text-xs font-semibold text-gray-700 mb-1">ชื่อตัวละคร</label><input type="text" id="sub-input-1" value="${item.name || ''}" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50"></div>
-                <div><label class="block text-xs font-semibold text-gray-700 mb-1">รูปลิงก์</label><input type="text" id="sub-input-2" value="${item.image_url || ''}" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50"></div>
+                <div><label class="block text-xs font-semibold text-gray-700 mb-1">ลิงก์รูปภาพ (URL)</label><input type="text" id="sub-input-2" value="${item.image_url || ''}" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50"></div>
                 <div class="grid grid-cols-2 gap-3">
                     <div><label class="block text-xs font-semibold text-gray-700 mb-1">หมวดหมู่</label><select id="sub-input-type" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50">${types.map(t=>`<option value="${t}" ${item.type===t?'selected':''}>${t}</option>`).join('')}</select></div>
                     <div><label class="block text-xs font-semibold text-gray-700 mb-1">สถานะ</label><select id="sub-input-status" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50">${statuses.map(s=>`<option value="${s}" ${item.status===s?'selected':''}>${s}</option>`).join('')}</select></div>
@@ -1214,9 +1241,13 @@
                 <div><label class="block text-xs font-semibold text-gray-700 mb-1">รายละเอียด</label><textarea id="sub-input-desc" class="w-full px-4 py-2.5 border rounded-xl text-sm bg-gray-50">${item.description || ''}</textarea></div>
             `;
         }
-        window.deleteArchiveItem = async function(id) { /*...*/ };
+        window.deleteArchiveItem = async function(id) { 
+            try { await supabase.from('character_archives').delete().eq('id', id); } catch(e){}
+            appData.archive = appData.archive.filter(p => p.id !== id);
+            renderAdminSubLists();
+            renderEverything();
+        };
 
-        // New Detailed Queue Modal Form
         window.openQueueModal = function() {
             activeSubModalType = 'queue'; editingSubId = null;
             document.getElementById('sub-modal-title').textContent = 'เพิ่มคิวงานใหม่';
@@ -1283,10 +1314,7 @@
         }
 
         window.deleteQueueItem = async function(id) {
-            try {
-                const { error } = await supabase.from('queues').delete().eq('id', id);
-                if (error) throw error;
-            } catch (e) {}
+            try { await supabase.from('queues').delete().eq('id', id); } catch (e) {}
             appData.queue = appData.queue.filter(q => q.id !== id);
             renderAdminSubLists();
             renderEverything();
@@ -1323,13 +1351,9 @@
                         newObj.sort_order = appData.queue.length;
                         const { data, error } = await supabase.from('queues').insert([newObj]).select().single();
                         if (data && !error) appData.queue.push(data);
-                        else {
-                            newObj.id = 'temp_' + Date.now();
-                            appData.queue.push(newObj); // local fallback
-                        }
+                        else { newObj.id = 'temp_' + Date.now(); appData.queue.push(newObj); } 
                     }
                 } catch (e) {
-                    // Local fallback if DB columns are missing
                     if (editingSubId) {
                         const q = appData.queue.find(item => item.id === editingSubId);
                         if (q) Object.assign(q, newObj);
@@ -1338,9 +1362,74 @@
                         appData.queue.push(newObj);
                     }
                 }
-            } else if (activeSubModalType === 'archive' || activeSubModalType === 'portfolio' || activeSubModalType === 'pricing') {
-                 // The old logic for these hasn't changed. Simplified here just to preserve space since the prompt focused on queue.
-                 // Assuming standard saving for others...
+            } 
+            else if (activeSubModalType === 'portfolio') {
+                const newObj = {
+                    title: document.getElementById('sub-input-1').value.trim(),
+                    url: document.getElementById('sub-input-2').value.trim()
+                };
+                
+                try {
+                    if (editingSubId) {
+                        await supabase.from('portfolios').update(newObj).eq('id', editingSubId);
+                        const p = appData.portfolio.find(item => item.id === editingSubId);
+                        if(p) Object.assign(p, newObj);
+                    } else {
+                        newObj.sort_order = appData.portfolio.length;
+                        const { data, error } = await supabase.from('portfolios').insert([newObj]).select().single();
+                        if (data && !error) appData.portfolio.push(data);
+                        else { newObj.id = 'temp_' + Date.now(); appData.portfolio.push(newObj); }
+                    }
+                } catch(e) {
+                    if (!editingSubId) { newObj.id = 'temp_' + Date.now(); appData.portfolio.push(newObj); }
+                }
+            }
+            else if (activeSubModalType === 'archive') {
+                const newObj = {
+                    name: document.getElementById('sub-input-1').value.trim(),
+                    image_url: document.getElementById('sub-input-2').value.trim(),
+                    type: document.getElementById('sub-input-type').value,
+                    status: document.getElementById('sub-input-status').value,
+                    description: document.getElementById('sub-input-desc').value.trim()
+                };
+                
+                try {
+                    if (editingSubId) {
+                        await supabase.from('character_archives').update(newObj).eq('id', editingSubId);
+                        const a = appData.archive.find(item => item.id === editingSubId);
+                        if(a) Object.assign(a, newObj);
+                    } else {
+                        newObj.sort_order = appData.archive.length;
+                        const { data, error } = await supabase.from('character_archives').insert([newObj]).select().single();
+                        if (data && !error) appData.archive.push(data);
+                        else { newObj.id = 'temp_' + Date.now(); appData.archive.push(newObj); }
+                    }
+                } catch(e) {
+                    if (!editingSubId) { newObj.id = 'temp_' + Date.now(); appData.archive.push(newObj); }
+                }
+            }
+            else if (activeSubModalType === 'pricing') {
+                const newObj = {
+                    name: document.getElementById('p-name').value.trim(),
+                    price: document.getElementById('p-price').value.trim(),
+                    description: document.getElementById('p-desc').value.trim(),
+                    popular: document.getElementById('p-popular').checked
+                };
+                
+                try {
+                    if (editingSubId) {
+                        await supabase.from('pricings').update(newObj).eq('id', editingSubId);
+                        const p = appData.pricing.find(item => item.id === editingSubId);
+                        if(p) Object.assign(p, newObj);
+                    } else {
+                        newObj.sort_order = appData.pricing.length;
+                        const { data, error } = await supabase.from('pricings').insert([newObj]).select().single();
+                        if (data && !error) appData.pricing.push(data);
+                        else { newObj.id = 'temp_' + Date.now(); appData.pricing.push(newObj); }
+                    }
+                } catch(e) {
+                    if (!editingSubId) { newObj.id = 'temp_' + Date.now(); appData.pricing.push(newObj); }
+                }
             }
 
             btn.disabled = false;
@@ -1350,16 +1439,85 @@
             renderEverything();
         };
 
-        window.saveAllAdminData = async function() { /*...*/ };
-        // ... Keeping rest of JS (copy func, etc.) identical
+        window.saveAllAdminData = async function() {
+            const btn = document.getElementById('save-all-btn');
+            btn.textContent = 'กำลังบันทึก...';
+            btn.disabled = true;
+
+            appData.title = document.getElementById('admin-site-title').value.trim();
+            appData.subtitle = document.getElementById('admin-site-subtitle').value.trim();
+            appData.desc = document.getElementById('admin-site-desc').value.trim();
+            appData.heroImg = document.getElementById('admin-hero-img').value.trim();
+            
+            // ใช้ตัวช่วย formatURL สำหรับลิงก์เพื่อป้องกันปัญหาลิงก์เปิดไม่ได้
+            appData.driveLink = document.getElementById('admin-drive-link').value.trim();
+            appData.igLink = document.getElementById('admin-ig-link').value.trim();
+            appData.fbLink = document.getElementById('admin-fb-link').value.trim();
+            
+            appData.bankName = document.getElementById('admin-bank-name').value.trim();
+            appData.accNo = document.getElementById('admin-acc-no').value.trim();
+            appData.accName = document.getElementById('admin-acc-name').value.trim();
+            appData.qrImg = document.getElementById('admin-qr-img').value.trim();
+
+            try {
+                await supabase.from('site_settings').upsert({
+                    id: SETTING_ID,
+                    title: appData.title,
+                    subtitle: appData.subtitle,
+                    description: appData.desc,
+                    hero_img: appData.heroImg,
+                    drive_link: appData.driveLink,
+                    ig_link: appData.igLink,
+                    fb_link: appData.fbLink,
+                    bank_name: appData.bankName,
+                    acc_no: appData.accNo,
+                    acc_name: appData.accName,
+                    qr_img: appData.qrImg
+                });
+            } catch (error) {
+                console.error("Error saving data:", error);
+            }
+
+            renderEverything();
+            
+            btn.textContent = 'บันทึกข้อมูลหน้าเว็บและชำระเงิน';
+            btn.disabled = false;
+            
+            const statusMsg = document.getElementById('save-status-msg');
+            statusMsg.classList.remove('hidden');
+            setTimeout(() => statusMsg.classList.add('hidden'), 4000);
+        };
+
         window.copyAccountInfo = function() {
             const accText = document.getElementById('display-acc-no').textContent;
-            navigator.clipboard.writeText(accText).then(() => {
+            // รองรับทั้ง Clipboard API และ execCommand สำหรับ iFrame
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(accText).then(showCopyMsg);
+            } else {
+                const textArea = document.createElement("textarea");
+                textArea.value = accText;
+                textArea.style.position = "fixed";
+                textArea.style.left = "-999999px";
+                textArea.style.top = "-999999px";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    showCopyMsg();
+                } catch (err) {
+                    console.error('Fallback: Oops, unable to copy', err);
+                }
+                textArea.remove();
+            }
+            
+            function showCopyMsg() {
                 const msgBox = document.getElementById('copy-msg');
                 msgBox.classList.remove('hidden');
                 setTimeout(() => msgBox.classList.add('hidden'), 3000);
-            });
+            }
         };
+
         const mbtn = document.getElementById('mobile-menu-btn');
         if (mbtn) {
             mbtn.addEventListener('click', () => document.getElementById('mobile-menu').classList.toggle('hidden'));
